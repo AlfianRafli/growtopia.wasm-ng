@@ -1,6 +1,6 @@
 {
   "name": "growtopia.wasm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Universal Growtopia ENet WASM for Node.js, Bun, and Browser (replacement for growtopia.js)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -22,6 +22,7 @@
       "require": "./dist/browser-transport.js"
     }
   },
+  "license": "MIT",
   "ava": {
     "files": [
       "__test__/**/*"
@@ -32,6 +33,27 @@
     ],
     "timeout": "3m",
     "serial": true
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "homepage": "https://github.com/StileDevs/growtopia.wasm#readme",
+  "bugs": {
+    "url": "https://github.com/StileDevs/growtopia.wasm/issues"
+  },
+  "repository": "https://github.com/StileDevs/growtopia.wasm",
+  "keywords": [
+    "growtopia",
+    "rust",
+    "wasm",
+    "webassembly",
+    "enet",
+    "udp"
+  ],
+  "author": {
+    "name": "StileDevs",
+    "email": "hendra@jad.li",
+    "url": "https://stile.jad.li"
   },
   "scripts": {
     "build:wasm": "rimraf pkg && wasm-pack build --target web --out-dir pkg",
