@@ -1,4 +1,4 @@
-target
+/target
 Cargo.lock
 .cargo
 .zed
@@ -12,16 +12,16 @@ yarn.lock
 *.node
 .yarn
 __test__
-docs
-assets
-scratch
-pkg
-tls
-test
+/docs
+/assets
+/scratch
+/pkg
+/tls
+/test
 typedoc.json
 tsconfig.json
-src
-lib
+/src
+/lib
 renovate.json
 build.rs
 Cargo.toml
@@ -31,4 +31,4 @@ Cargo.toml
 pnpm-lock.yaml
 bun.lock
 tsup.config.ts
-examples
+/examples
