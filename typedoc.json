@@ -3,6 +3,6 @@
   "cname": "gt-wasm.jad.li",
   "out": "docs",
   "theme": "default",
-  "entryPointStrategy": "expand",
+  "entryPointStrategy": "resolve",
   "readme": "./README.md"
 }

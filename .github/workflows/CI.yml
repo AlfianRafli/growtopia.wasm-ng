@@ -116,7 +116,7 @@ jobs:
       - name: Zip dist directory
         run: |
           VERSION=$(git log -1 --pretty=%B | tr -d '\r\n')
-          zip -r gt-wasm-v${VERSION}.zip" dist/
+          zip -r "gt-wasm-v${VERSION}.zip" dist/
 
       - name: Create Release
         id: create_release
