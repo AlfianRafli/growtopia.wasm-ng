@@ -16,7 +16,6 @@ A universal Growtopia ENet library compiled to WebAssembly (WASM) for Node.js, B
 | --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
 | **Core Engine**       | Native Node.js bindings (`napi-rs` / `.node`)               | Rust compiled to WebAssembly (`wasm-pack`)                        |
 | **Platform Support**  | Requires OS/CPU specific native binaries                    | Single WASM binary (Runs on Windows, Linux, macOS, Android, etc.) |
-| **Runtimes**          | Node.js only                                                | Node.js, Bun.js, and Web Browsers                                 |
 | **Installation**      | Heavy; may fail on unsupported OS/arch without C++ compiler | Zero native compilation; instant install                          |
 | **Network Transport** | Native C ENet sockets                                       | TS transport bridge (`dgram` for Node/Bun)                        |
 
