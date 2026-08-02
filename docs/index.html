@@ -15,6 +15,43 @@
 <p>A universal Growtopia ENet library compiled to WebAssembly (WASM) for Node.js, Bun.js. Designed as a cross-platform replacement for <a href="https://github.com/StileDevs/growtopia.js">growtopia.js</a>.</p>
 <h2 id="why-replacement-of-growtopiajs" class="tsd-anchor-link">Why replacement of growtopia.js?<a href="#why-replacement-of-growtopiajs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p><a href="https://github.com/StileDevs/growtopia.js">growtopia.js</a> relied on native Rust bindings compiled via <a href="https://napi.rs/">napi-rs</a>, requiring platform-specific binary builds and causing compatibility issues across different platforms. <a href="https://github.com/StileDevs/growtopia.wasm">growtopia-wasm</a> solves this by compiling the Rust core ENet library directly into WebAssembly, guaranteeing seamless execution across Node.js, Bun.js environments.</p>
+<h2 id="differences-between-growtopiajs-and-growtopiawasm" class="tsd-anchor-link">Differences between growtopia.js and growtopia.wasm<a href="#differences-between-growtopiajs-and-growtopiawasm" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<table>
+<thead>
+<tr>
+<th>Feature / Aspect</th>
+<th><code>growtopia.js</code></th>
+<th><code>growtopia.wasm</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core Engine</strong></td>
+<td>Native Node.js bindings (<code>napi-rs</code> / <code>.node</code>)</td>
+<td>Rust compiled to WebAssembly (<code>wasm-pack</code>)</td>
+</tr>
+<tr>
+<td><strong>Platform Support</strong></td>
+<td>Requires OS/CPU specific native binaries</td>
+<td>Single WASM binary (Runs on Windows, Linux, macOS, Android, etc.)</td>
+</tr>
+<tr>
+<td><strong>Runtimes</strong></td>
+<td>Node.js only</td>
+<td>Node.js, Bun.js, and Web Browsers</td>
+</tr>
+<tr>
+<td><strong>Installation</strong></td>
+<td>Heavy; may fail on unsupported OS/arch without C++ compiler</td>
+<td>Zero native compilation; instant install</td>
+</tr>
+<tr>
+<td><strong>Network Transport</strong></td>
+<td>Native C ENet sockets</td>
+<td>TS transport bridge (<code>dgram</code> for Node/Bun)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="installation" class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">growtopia.wasm</span>
 </code><button type="button">Copy</button></pre>
@@ -58,6 +95,7 @@
 <div class="tsd-accordion-details"><a href="#growtopiawasm"><span>growtopia.wasm</span></a>
 <ul>
 <li><a href="#why-replacement-of-growtopiajs"><span>Why replacement of growtopia.js?</span></a></li>
+<li><a href="#differences-between-growtopiajs-and-growtopiawasm"><span>Differences between growtopia.js and growtopia.wasm</span></a></li>
 <li><a href="#installation"><span>Installation</span></a></li>
 <li>
 <ul>
