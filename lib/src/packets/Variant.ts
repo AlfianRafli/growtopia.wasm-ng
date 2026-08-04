@@ -86,7 +86,7 @@ export class Variant {
         case VariantTypes.FLOAT_2: {
           let value: number[] = [];
 
-          for (let i = 1; i <= 2; i++) {
+          for (let j = 1; j <= 2; j++) {
             value.push(data.readFloatLE(pos));
             pos += 4;
           }
@@ -96,7 +96,7 @@ export class Variant {
         case VariantTypes.FLOAT_3: {
           let value: number[] = [];
 
-          for (let i = 1; i <= 3; i++) {
+          for (let j = 1; j <= 3; j++) {
             value.push(data.readFloatLE(pos));
             pos += 4;
           }

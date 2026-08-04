@@ -5,7 +5,7 @@ export class ExtendBuffer {
     data: number[] | number,
     public mempos = 0
   ) {
-    this.data = Array.isArray(data) ? data : new Array(data).fill(0);
+    this.data = Array.isArray(data) ? data : Array.from({ length: data }, () => 0);
   }
 
   private read(size: number): number {
@@ -83,7 +83,11 @@ export class ExtendBuffer {
 
   public async writeString(str: string, be = false) {
     const bytes = str.split("").map(char => char.charCodeAt(0));
-    be ? this.writeBE(str.length, 2) : this.write(str.length, 2);
+    if (be) {
+      this.writeBE(str.length, 2);
+    } else {
+      this.write(str.length, 2);
+    }
     for (const byte of bytes) {
       this.data[this.mempos++] = byte;
     }

@@ -37,13 +37,10 @@ export class BrowserENetHost {
     this.emitter = createNanoEvents<ENetEvents>();
 
     const sendCallback = (ip: string, port: number, data: Uint8Array) => {
-      try {
-        if (this.dataChannel && this.dataChannel.readyState === "open") {
-          this.dataChannel.send(data as any);
-        }
-      } catch (e) {
-        console.error("SOCKET SEND THREW AN ERROR:", e);
+      if (!this.dataChannel || this.dataChannel.readyState !== "open") {
+        throw new Error("RTCDataChannel is not open or attached.");
       }
+      this.dataChannel.send(data as any);
     };
 
     this.host = new Host("0.0.0.0", 0, settings, sendCallback);
@@ -65,9 +62,13 @@ export class BrowserENetHost {
     this.dataChannel = channel;
     this.dataChannel.binaryType = "arraybuffer";
 
-    this.dataChannel.onmessage = event => {
+    this.dataChannel.addEventListener("message", event => {
       push_incoming_packet(this.host.id, "192.168.1.1", 1234, new Uint8Array(event.data));
-    };
+    });
+
+    this.dataChannel.addEventListener("error", event => {
+      throw event;
+    });
   }
 
   /**
@@ -108,7 +109,7 @@ export class BrowserENetHost {
     const autoFreePacket = options.autoFreePacket !== false;
 
     if (this.timer) return;
-    this.timer = window.setInterval(() => {
+    this.timer = setInterval(() => {
       let event;
       while ((event = this.host.service()) && event.eventType !== 0) {
         switch (event.eventType) {
@@ -135,7 +136,7 @@ export class BrowserENetHost {
           }
         }
       }
-    }, ms);
+    }, ms) as unknown as number;
   }
 
   /**
