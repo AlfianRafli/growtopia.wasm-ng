@@ -4,7 +4,7 @@ export default defineConfig({
   entry: {
     index: "lib/index.ts",
     "node-transport": "lib/src/node-transport.ts",
-    "browser-transport": "lib/src/browser-transport.ts"
+    "browser-transport": "lib/src/browser-transport.ts",
   },
   splitting: false,
   sourcemap: true,
@@ -15,12 +15,20 @@ export default defineConfig({
   shims: true,
   noExternal: ["nanoevents"],
   loader: {
-    ".wasm": "copy"
+    ".wasm": "copy",
   },
   async onSuccess() {
     // Copy the generated WASM file into dist
     const fs = await import("fs");
-    fs.copyFileSync("pkg/growtopia_wasm_bg.wasm", "dist/growtopia_wasm_bg.wasm");
-    console.log("Copied pkg/growtopia_wasm_bg.wasm to dist/");
-  }
+    fs.copyFileSync(
+      "pkg/growtopia_wasm_bg.wasm",
+      "dist/growtopia_wasm_bg.wasm",
+    );
+    fs.copyFileSync(
+      "pkg/growtopia_wasm_bg.wasm.d.ts",
+      "dist/growtopia_wasm_bg.wasm.d.ts",
+    );
+    fs.copyFileSync("pkg/growtopia_wasm.d.ts", "dist/growtopia_wasm.d.ts");
+    console.log("Copied every WASM file & type definitions into dist");
+  },
 });
