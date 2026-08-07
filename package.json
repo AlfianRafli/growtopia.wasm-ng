@@ -1,6 +1,6 @@
 {
   "name": "growtopia.wasm",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A Universal Growtopia ENet WASM for Node.js, Bun.js (replacement for growtopia.js)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
