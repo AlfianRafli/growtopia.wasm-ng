@@ -1,4 +1,4 @@
-import initWasm, { Packet, Host, PeerState, PacketKind, mtuMax, crc32, timeSinceEpoch } from "../pkg/growtopia_wasm.js";
+import initWasm, { Packet, Host, PeerState, PacketKind, mtuMax, crc32, timeSinceEpoch } from "./pkg/growtopia_wasm.js";
 import { Peer } from "./src/Peer";
 import { NodeENetHost, NodeENetClient, NodeENetServer } from "./src/node-transport";
 import { BrowserENetHost, BrowserENetClient, BrowserENetServer } from "./src/browser-transport";
@@ -25,9 +25,9 @@ export async function init(input?: any): Promise<void> {
 
       let wasmPath = "";
       if (typeof __dirname !== "undefined") {
-        wasmPath = path.join(__dirname, "growtopia_wasm_bg.wasm");
+        wasmPath = path.join(__dirname, "pkg", "growtopia_wasm_bg.wasm");
       } else if (import.meta && import.meta.url) {
-        wasmPath = fileURLToPath(new URL("growtopia_wasm_bg.wasm", import.meta.url));
+        wasmPath = fileURLToPath(new URL("pkg/growtopia_wasm_bg.wasm", import.meta.url));
       }
 
       if (wasmPath && fs.existsSync(wasmPath)) {

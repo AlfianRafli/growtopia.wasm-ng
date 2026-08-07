@@ -1,4 +1,4 @@
-import { Host, Packet, PacketKind } from "../../pkg/growtopia_wasm.js";
+import { Host, Packet, PacketKind } from "../pkg/growtopia_wasm.js";
 
 /**
  * Represents a connected remote ENet peer endpoint.

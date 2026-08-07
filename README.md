@@ -47,7 +47,7 @@ async function main() {
   // Start event polling loop
   server.startPolling(15);
 
-  server.emitter.on("connect", (peer) => {
+  server.emitter.on("connect", peer => {
     console.log(`Client connected: ID ${peer.id} from ${peer.ip}:${peer.port}`);
 
     // Send Hello packet (Type 1)
@@ -62,9 +62,7 @@ async function main() {
 
   server.emitter.on("receive", (peer, packet, channelId) => {
     const data = packet.data();
-    console.log(
-      `Received ${data.length} bytes on channel ${channelId} from peer ${peer.id}`,
-    );
+    console.log(`Received ${data.length} bytes on channel ${channelId} from peer ${peer.id}`);
   });
 }
 
@@ -85,7 +83,7 @@ async function main() {
   const peer = client.connect("127.0.0.1", 17091, 2, 0);
   client.startPolling(15);
 
-  client.emitter.on("connect", (p) => {
+  client.emitter.on("connect", p => {
     console.log(`Connected to server! Peer ID: ${p.id}`);
   });
 
@@ -95,9 +93,7 @@ async function main() {
 
   client.emitter.on("receive", (p, packet, channelId) => {
     const data = packet.data();
-    console.log(
-      `Received packet on channel ${channelId}: ${data.length} bytes`,
-    );
+    console.log(`Received packet on channel ${channelId}: ${data.length} bytes`);
   });
 }
 
@@ -118,16 +114,12 @@ const tankPacket = TankPacket.from({
   type: 0x3,
   netID: 10,
   xPos: 100.5,
-  yPos: 200.25,
+  yPos: 200.25
 });
 const tankBuf = tankPacket.parse();
 
 // Variant List Packet
-const variant = Variant.from(
-  { netID: 1, delay: 0 },
-  "OnConsoleMessage",
-  "Hello Growtopia!",
-);
+const variant = Variant.from({ netID: 1, delay: 0 }, "OnConsoleMessage", "Hello Growtopia!");
 const variantTankPacket = variant.parse();
 ```
 

@@ -1,15 +1,5 @@
 import test from "ava";
-import {
-  init,
-  TextPacket,
-  TankPacket,
-  Variant,
-  VariantTypes,
-  PacketTypes,
-  Collection,
-  NodeENetServer,
-  NodeENetClient
-} from "../dist/index.mjs";
+import { init, TextPacket, TankPacket, Variant, Collection, NodeENetServer } from "../dist/index.mjs";
 
 test.before(async () => {
   await init();

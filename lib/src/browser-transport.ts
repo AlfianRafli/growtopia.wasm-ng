@@ -1,4 +1,4 @@
-import { Host, push_incoming_packet, Packet, JsHostSettings } from "../../pkg/growtopia_wasm.js";
+import { Host, push_incoming_packet, Packet, JsHostSettings } from "../pkg/growtopia_wasm.js";
 import { createNanoEvents, Emitter } from "nanoevents";
 import { Peer } from "./Peer";
 import { Collection } from "../utils/Collection";

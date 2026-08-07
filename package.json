@@ -1,6 +1,6 @@
 {
   "name": "growtopia.wasm",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "A Universal Growtopia ENet WASM for Node.js, Bun.js (replacement for growtopia.js)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -56,7 +56,7 @@
     "url": "https://stile.jad.li"
   },
   "scripts": {
-    "build:wasm": "rimraf pkg && wasm-pack build --target web --out-dir pkg",
+    "build:wasm": "rimraf lib/pkg && wasm-pack build --target web --out-dir lib/pkg",
     "build:tsup": "rimraf dist && tsup && tsc --emitDeclarationOnly --outDir dist",
     "build": "bun run build:wasm && bun run build:tsup",
     "test": "ava",

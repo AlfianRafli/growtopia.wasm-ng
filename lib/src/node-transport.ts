@@ -1,10 +1,5 @@
 import { createSocket, Socket } from "dgram";
-import {
-  Host,
-  push_incoming_packet,
-  Packet,
-  JsHostSettings,
-} from "../../pkg/growtopia_wasm.js";
+import { Host, push_incoming_packet, Packet, JsHostSettings } from "../pkg/growtopia_wasm.js";
 import { createNanoEvents, Emitter } from "nanoevents";
 import { Peer } from "./Peer";
 import { Collection } from "../utils/Collection";
@@ -38,14 +33,10 @@ export class NodeENetHost {
 
   /** In-memory cache holding active Peer wrapper instances. */
   public cache = {
-    peers: new Collection<number, Peer>(),
+    peers: new Collection<number, Peer>()
   };
 
-  protected constructor(
-    bindIp: string,
-    bindPort: number,
-    settings: JsHostSettings,
-  ) {
+  protected constructor(bindIp: string, bindPort: number, settings: JsHostSettings) {
     this.bindIp = bindIp;
     this.bindPort = bindPort;
     this.socket = createSocket("udp4");
@@ -59,15 +50,10 @@ export class NodeENetHost {
     this.host = new Host(bindIp, bindPort, settings, sendCallback);
 
     this.socket.on("message", (msg, rinfo) => {
-      push_incoming_packet(
-        this.host.id,
-        rinfo.address,
-        rinfo.port,
-        new Uint8Array(msg),
-      );
+      push_incoming_packet(this.host.id, rinfo.address, rinfo.port, new Uint8Array(msg));
     });
 
-    this.socket.on("error", (err) => {
+    this.socket.on("error", err => {
       throw err;
     });
   }
@@ -125,10 +111,7 @@ export class NodeENetHost {
    * @param ms - Polling interval duration in milliseconds (default: 15ms).
    * @param options - Polling options such as auto-freeing received packets.
    */
-  public startPolling(
-    ms: number = 15,
-    options: { autoFreePacket?: boolean; autoFreePeer?: boolean } = {},
-  ) {
+  public startPolling(ms: number = 15, options: { autoFreePacket?: boolean; autoFreePeer?: boolean } = {}) {
     const autoFreePacket = options.autoFreePacket !== false;
 
     if (this.timer) return;
@@ -181,12 +164,7 @@ export class NodeENetHost {
    * @param data - User data integer passed in connect request.
    * @returns Connected Peer wrapper instance.
    */
-  public connect(
-    ip: string,
-    port: number,
-    channelCount: number,
-    data: number,
-  ): Peer {
+  public connect(ip: string, port: number, channelCount: number, data: number): Peer {
     const peerId = this.host.connect(ip, port, channelCount, data);
     return this.getPeer(peerId);
   }
@@ -196,12 +174,7 @@ export class NodeENetHost {
  * High-level Node.js ENet Client host configured for client protocol specs.
  */
 export class NodeENetClient extends NodeENetHost {
-  constructor(
-    bindIp: string = "0.0.0.0",
-    bindPort: number = 0,
-    peerCount: number = 1,
-    channelLimit: number = 2,
-  ) {
+  constructor(bindIp: string = "0.0.0.0", bindPort: number = 0, peerCount: number = 1, channelLimit: number = 2) {
     const settings = new JsHostSettings();
     settings.peerLimit = peerCount;
     settings.channelLimit = channelLimit;
@@ -215,12 +188,7 @@ export class NodeENetClient extends NodeENetHost {
  * High-level Node.js ENet Server host configured for server protocol specs.
  */
 export class NodeENetServer extends NodeENetHost {
-  constructor(
-    bindIp: string,
-    bindPort: number,
-    peerCount: number,
-    channelLimit: number,
-  ) {
+  constructor(bindIp: string, bindPort: number, peerCount: number, channelLimit: number) {
     const settings = new JsHostSettings();
     settings.peerLimit = peerCount;
     settings.channelLimit = channelLimit;

@@ -1,5 +1,5 @@
-dist
-pkg
-tls
-node_modules
-target
+dist/
+tls/
+node_modules/
+target/
+pkg/

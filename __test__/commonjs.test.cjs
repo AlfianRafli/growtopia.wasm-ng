@@ -1,17 +1,7 @@
 const ava = require("ava");
 const test = ava.default || ava;
 
-const {
-  init,
-  TextPacket,
-  TankPacket,
-  Variant,
-  VariantTypes,
-  PacketTypes,
-  Collection,
-  NodeENetServer,
-  NodeENetClient
-} = require("../dist/index.js");
+const { init, TextPacket, TankPacket, Variant, Collection, NodeENetServer } = require("../dist/index.js");
 
 test.before(async () => {
   await init();
