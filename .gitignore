@@ -3,3 +3,10 @@ tls/
 node_modules/
 target/
 pkg/
+
+AGENTS.md
+TASKS.md
+PRD.md
+TEST.md
+
+

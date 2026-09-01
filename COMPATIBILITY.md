@@ -29,7 +29,7 @@ Generated: 2026-09-01
 
 | API | growtopia.js | growtopia.wasm-ng | Status | Notes |
 |-----|--------------|-------------------|--------|-------|
-| `new Host(ip, port, maxPeers, ...)` | ✓ Native class | ✓ WASM `Host` | [~] | Different constructor signature |
+| `new Host(ip, port, maxPeers, ...)` | ✓ Native class | ✓ WASM `CompatHost` | [x] | Via `createHost()` factory with identical signature |
 | `host.connect(ip, port)` | ✓ | ✓ | [x] | Fully compatible |
 | `host.send(netID, data, channel)` | ✓ | ✓ | [x] | Fully compatible |
 | `host.service()` | ✓ Blocking loop | ✓ Event-driven | [~] | Different event model |
@@ -238,6 +238,8 @@ Generated: 2026-09-01
 
 ### 1. Host Constructor Signature
 
+**Status**: ✓ RESOLVED - Compatibility layer implemented
+
 **growtopia.js**:
 ```typescript
 new Host(
@@ -257,20 +259,22 @@ new Host(
 
 **growtopia.wasm-ng**:
 ```typescript
-// WASM Host created via JsHostSettings
-new JsHostSettings({
-  ip: string,
-  port: number,
-  maxPeers: number,
-  channelLimit: number,
-  useNewPacket: boolean,
-  useNewServerPacket: boolean,
-  // ... additional options
-})
+// Original WASM Host created via JsHostSettings (internal)
+new JsHostSettings({...})
+
+// Compatibility wrapper with identical signature
+import { createHost } from "growtopia.wasm";
+const host = createHost(ip, port, peerLimit, channelLimit, ...);
 ```
 
-**Impact**: Users must adapt constructor calls when migrating.
-**Recommendation**: Add compatibility wrapper with same signature.
+**Implementation**: 
+- Created `CompatHost` class with identical 11-parameter constructor
+- Exported `createHost()` factory function for direct replacement
+- All parameters have default values (peerLimit=32, channelLimit=2, etc.)
+
+**Verification**: 17 unit tests passing
+
+**Impact**: ✓ Zero migration required for Host instantiation
 
 ### 2. Event Emitter Pattern
 

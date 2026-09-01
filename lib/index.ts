@@ -8,6 +8,7 @@ import { TankPacket } from "./src/packets/TankPacket";
 import { TextPacket } from "./src/packets/TextPacket";
 import { Variant } from "./src/packets/Variant";
 import { VariantTypes, PacketTypes } from "./src/Constants";
+import { CompatHost, createHost } from "./src/compat";
 
 /**
  * Initializes the WebAssembly core environment for the ENet library.
@@ -61,7 +62,9 @@ export {
   TextPacket,
   Variant,
   VariantTypes,
-  PacketTypes
+  PacketTypes,
+  CompatHost,
+  createHost
 };
 
 export type * from "./src/types";
