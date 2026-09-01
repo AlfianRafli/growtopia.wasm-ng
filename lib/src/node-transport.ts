@@ -156,6 +156,21 @@ export class NodeENetHost {
   }
 
   /**
+   * Releases all resources held by this host: stops polling,
+   * closes the underlying UDP socket, and clears the peer cache.
+   * Safe to call multiple times.
+   */
+  public destroy() {
+    this.stopPolling();
+    try {
+      this.socket.close();
+    } catch {
+      // Socket may already be closed; ignore.
+    }
+    this.cache.peers.clear();
+  }
+
+  /**
    * Connects to a remote ENet host endpoint.
    *
    * @param ip - Target host IP address.
