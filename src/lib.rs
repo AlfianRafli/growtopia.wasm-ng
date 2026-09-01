@@ -302,7 +302,12 @@ impl Host {
     }
 
     pub fn flush(&mut self) {
-        self.inner.flush();
+        // Safe flush: rusty_enet panics if no peers connected and using_new_packet is true
+        // Check if there are connected peers before calling flush
+        let has_peers = self.inner.peers().next().is_some();
+        if has_peers {
+            self.inner.flush();
+        }
     }
 
     pub fn broadcast(&mut self, channelId: u8, packet: &Packet) {
