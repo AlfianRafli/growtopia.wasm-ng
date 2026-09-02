@@ -394,6 +394,27 @@ All core growtopia.js features are implemented or have WASM equivalents.
 
 ---
 
+## Known Issues & Fixes
+
+### UTF-8 Unicode Handling (FIXED: 2026-09-02)
+
+**Issue**: Multi-byte UTF-8 characters (CJK, emoji) were truncated in TextPacket and Variant.
+
+**Root Cause**: 
+- `TextPacket.parse()` used `str.length` (character count) instead of `Buffer.byteLength()` (byte count)
+- `Variant.from()` calculated string length before encoding, causing buffer underallocation
+
+**Fix**: 
+- Commit `602b70b`: Use `Buffer.byteLength(str, 'utf-8')` and calculate length from encoded buffer
+- All unicode characters now round-trip correctly
+
+**Verification**:
+- ✓ 'Hello 世界' preserves correctly in TextPacket
+- ✓ Emoji '🌍🚀' preserves correctly in Variant
+- ✓ 185/185 tests passing (was 183 with 2 unicode tests skipped)
+
+---
+
 ## Summary
 
 ### Compatibility Score
