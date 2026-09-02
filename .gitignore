@@ -4,10 +4,4 @@ node_modules/
 target/
 pkg/
 
-AGENTS.md
-TASKS.md
-PRD.md
-TEST.md
-__test__/
-COMPATIBILITY.md
-PHASE_2-9_REPORT.md
+*.md
