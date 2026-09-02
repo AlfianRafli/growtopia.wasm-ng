@@ -38,10 +38,11 @@ export class TextPacket {
    */
   public parse() {
     const str = this.strings.join("\n");
-    const buffer = Buffer.alloc(4 + str.length + 1); // + 1 for null terminator
+    const byteLength = Buffer.byteLength(str, 'utf-8');
+    const buffer = Buffer.alloc(4 + byteLength + 1); // + 1 for null terminator
 
     buffer.writeUInt32LE(this.type);
-    buffer.write(str, 4);
+    buffer.write(str, 4, 'utf-8');
 
     return buffer;
   }

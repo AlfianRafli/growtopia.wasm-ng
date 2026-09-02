@@ -121,12 +121,11 @@ export class Variant {
         case "string": {
           buf.push(VariantTypes.STRING);
 
+          const text_buf = new TextEncoder().encode(arg);
           const bytes = new Uint32Array(1);
-          bytes[0] = arg.length;
+          bytes[0] = text_buf.length;
 
           const uint8_buf = new Uint8ClampedArray(bytes.buffer);
-          const text_buf = new TextEncoder().encode(arg);
-
           buf = [...buf, ...Array.from(uint8_buf), ...Array.from(text_buf)];
           break;
         }
