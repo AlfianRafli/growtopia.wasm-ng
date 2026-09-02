@@ -20,7 +20,9 @@
       "types": "./dist/src/browser-transport.d.ts",
       "import": "./dist/browser-transport.mjs",
       "require": "./dist/browser-transport.js"
-    }
+    },
+    "./package.json": "./package.json",
+    "./lib/pkg/*": "./lib/pkg/*"
   },
   "license": "MIT",
   "ava": {

@@ -1,8 +1,45 @@
 import { createSocket, Socket } from "dgram";
-import { Host, push_incoming_packet, Packet, JsHostSettings } from "../pkg/growtopia_wasm.js";
+import { Host, push_incoming_packet, Packet, JsHostSettings, initSync } from "../pkg/growtopia_wasm.js";
 import { createNanoEvents, Emitter } from "nanoevents";
 import { Peer } from "./Peer";
 import { Collection } from "../utils/Collection";
+import * as fs from "fs";
+import * as path from "path";
+
+// Auto-initialize WASM bindings synchronously on module load
+let wasmInitDone = false;
+export function ensureWasmInitialized(): void {
+  if (wasmInitDone) return;
+  try {
+    // Use __filename to get the actual module location
+    const moduleDir = path.dirname(__filename);
+    const wasmPath = path.resolve(moduleDir, "../pkg/growtopia_wasm_bg.wasm");
+    if (fs.existsSync(wasmPath)) {
+      const wasmBuffer = fs.readFileSync(wasmPath);
+      initSync(wasmBuffer);
+      wasmInitDone = true;
+      return;
+    }
+  } catch {
+    // Fallback
+  }
+
+  try {
+    // If in bundled context, try relative to dist
+    const wasmPath = path.resolve(process.cwd(), "node_modules/growtopia.wasm/lib/pkg/growtopia_wasm_bg.wasm");
+    if (fs.existsSync(wasmPath)) {
+      const wasmBuffer = fs.readFileSync(wasmPath);
+      initSync(wasmBuffer);
+      wasmInitDone = true;
+      return;
+    }
+  } catch {
+    // Silent fail
+  }
+}
+
+// Auto-run on import
+ensureWasmInitialized();
 
 /**
  * ENet event signatures for connection, disconnection, and packet reception.
