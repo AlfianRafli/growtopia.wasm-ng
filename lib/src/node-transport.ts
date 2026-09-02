@@ -10,32 +10,34 @@ import * as path from "path";
 let wasmInitDone = false;
 export function ensureWasmInitialized(): void {
   if (wasmInitDone) return;
-  try {
-    // Use __filename to get the actual module location
-    const moduleDir = path.dirname(__filename);
-    const wasmPath = path.resolve(moduleDir, "../pkg/growtopia_wasm_bg.wasm");
-    if (fs.existsSync(wasmPath)) {
-      const wasmBuffer = fs.readFileSync(wasmPath);
-      initSync(wasmBuffer);
-      wasmInitDone = true;
-      return;
+  
+  // Try multiple paths to find the WASM binary
+  const candidatePaths = [
+    // When running from dist/ (tsup bundle): dist/node-transport.js -> dist/pkg/
+    path.resolve(path.dirname(__filename), "./pkg/growtopia_wasm_bg.wasm"),
+    // When running from lib/src/ (ts-node/tsx): lib/src/node-transport.ts -> lib/pkg/
+    path.resolve(path.dirname(__filename), "../pkg/growtopia_wasm_bg.wasm"),
+    // When running from bundled dist/ with nested structure
+    path.resolve(path.dirname(__filename), "../dist/pkg/growtopia_wasm_bg.wasm"),
+    // Fallback to node_modules (consumer project)
+    path.resolve(process.cwd(), "node_modules/growtopia.wasm/lib/pkg/growtopia_wasm_bg.wasm"),
+  ];
+  
+  for (const wasmPath of candidatePaths) {
+    try {
+      if (fs.existsSync(wasmPath)) {
+        const wasmBuffer = fs.readFileSync(wasmPath);
+        initSync(wasmBuffer);
+        wasmInitDone = true;
+        console.log(`[WASM] Initialized from: ${wasmPath}`);
+        return;
+      }
+    } catch {
+      // Try next path
     }
-  } catch {
-    // Fallback
   }
-
-  try {
-    // If in bundled context, try relative to dist
-    const wasmPath = path.resolve(process.cwd(), "node_modules/growtopia.wasm/lib/pkg/growtopia_wasm_bg.wasm");
-    if (fs.existsSync(wasmPath)) {
-      const wasmBuffer = fs.readFileSync(wasmPath);
-      initSync(wasmBuffer);
-      wasmInitDone = true;
-      return;
-    }
-  } catch {
-    // Silent fail
-  }
+  
+  console.warn("[WASM] Failed to initialize WASM from any candidate path");
 }
 
 // Auto-run on import
