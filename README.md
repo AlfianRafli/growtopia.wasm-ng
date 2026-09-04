@@ -2,7 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/@alfianrafli/growtopia.wasm?style=flat-square)](https://npmjs.com/package/@alfianrafli/growtopia.wasm)
 [![NPM Downloads](https://img.shields.io/npm/dw/@alfianrafli/growtopia.wasm?style=flat-square&color=blue)](https://npmjs.com/package/@alfianrafli/growtopia.wasm)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/StileDevs/@alfianrafli/growtopia.wasm/CI.yml?branch=main&style=flat-square)](https://github.com/StileDevs/@alfianrafli/growtopia.wasm/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/StileDevs/@alfianrafli/growtopia.wasm/CI.yml?branch=main&style=flat-square)](https://github.com/AlfianRafli/growtopia.wasm-ng/actions)
 
 A universal Growtopia ENet library compiled to WebAssembly (WASM) for Node.js, Bun.js. Designed as a cross-platform replacement for [growtopia.js](https://github.com/StileDevs/growtopia.js).
 
@@ -127,3 +127,12 @@ const variantTankPacket = variant.parse();
 
 - [Documentation](https://gt-wasm.jad.li/)
 - [Discord Community](https://discord.gg/sGrxfKZY5t)
+
+- ---
+
+## 📄 License & Credits
+
+This project is open-source software licensed under the [MIT License](LICENSE).
+
+It is a fork of the original work by [Original Author](https://github.com/StileDevs/growtopia.wasm). Massive thanks to them for laying the foundation. All modifications and current maintenance by Rafli(https://github.com/AlfianRafli).
+
