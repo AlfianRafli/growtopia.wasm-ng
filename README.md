@@ -1,18 +1,18 @@
-# growtopia.wasm
+# @alfianrafli/growtopia.wasm
 
-[![NPM Version](https://img.shields.io/npm/v/growtopia.wasm?style=flat-square)](https://npmjs.com/package/growtopia.wasm)
-[![NPM Downloads](https://img.shields.io/npm/dw/growtopia.wasm?style=flat-square&color=blue)](https://npmjs.com/package/growtopia.wasm)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/StileDevs/growtopia.wasm/CI.yml?branch=main&style=flat-square)](https://github.com/StileDevs/growtopia.wasm/actions)
+[![NPM Version](https://img.shields.io/npm/v/@alfianrafli/growtopia.wasm?style=flat-square)](https://npmjs.com/package/@alfianrafli/growtopia.wasm)
+[![NPM Downloads](https://img.shields.io/npm/dw/@alfianrafli/growtopia.wasm?style=flat-square&color=blue)](https://npmjs.com/package/@alfianrafli/growtopia.wasm)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/StileDevs/@alfianrafli/growtopia.wasm/CI.yml?branch=main&style=flat-square)](https://github.com/StileDevs/@alfianrafli/growtopia.wasm/actions)
 
 A universal Growtopia ENet library compiled to WebAssembly (WASM) for Node.js, Bun.js. Designed as a cross-platform replacement for [growtopia.js](https://github.com/StileDevs/growtopia.js).
 
 ## Why replacement of growtopia.js?
 
-[growtopia.js](https://github.com/StileDevs/growtopia.js) relied on native Rust bindings compiled via [napi-rs](https://napi.rs/), requiring platform-specific binary builds and causing compatibility issues across different platforms. [growtopia-wasm](https://github.com/StileDevs/growtopia.wasm) solves this by compiling the Rust core ENet library directly into WebAssembly, guaranteeing seamless execution across Node.js, Bun.js environments.
+[growtopia.js](https://github.com/StileDevs/growtopia.js) relied on native Rust bindings compiled via [napi-rs](https://napi.rs/), requiring platform-specific binary builds and causing compatibility issues across different platforms. [growtopia-wasm](https://github.com/StileDevs/@alfianrafli/growtopia.wasm) solves this by compiling the Rust core ENet library directly into WebAssembly, guaranteeing seamless execution across Node.js, Bun.js environments.
 
-## Differences between growtopia.js and growtopia.wasm
+## Differences between growtopia.js and @alfianrafli/growtopia.wasm
 
-| Feature / Aspect      | `growtopia.js`                                              | `growtopia.wasm`                                                  |
+| Feature / Aspect      | `growtopia.js`                                              | `@alfianrafli/growtopia.wasm`                                                  |
 | --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
 | **Core Engine**       | Native Node.js bindings (`napi-rs` / `.node`)               | Rust compiled to WebAssembly (`wasm-pack`)                        |
 | **Platform Support**  | Requires OS/CPU specific native binaries                    | Single WASM binary (Runs on Windows, Linux, macOS, Android, etc.) |
@@ -22,19 +22,19 @@ A universal Growtopia ENet library compiled to WebAssembly (WASM) for Node.js, B
 ## Installation
 
 ```bash
-npm install growtopia.wasm
+npm install @alfianrafli/growtopia.wasm
 ```
 
 or with Bun:
 
 ```bash
-bun add growtopia.wasm
+bun add @alfianrafli/growtopia.wasm
 ```
 
 ### ENet Server Example
 
 ```js
-import { NodeENetServer, init, Packet, PacketKind } from "growtopia.wasm";
+import { NodeENetServer, init, Packet, PacketKind } from "@alfianrafli/growtopia.wasm";
 
 async function main() {
   // Initialize WebAssembly core
@@ -72,7 +72,7 @@ main();
 ### ENet Client Example
 
 ```js
-import { NodeENetClient, init } from "growtopia.wasm";
+import { NodeENetClient, init } from "@alfianrafli/growtopia.wasm";
 
 async function main() {
   await init();
@@ -103,7 +103,7 @@ main();
 ### Packet Serialization Example
 
 ```js
-import { TextPacket, TankPacket, Variant } from "growtopia.wasm";
+import { TextPacket, TankPacket, Variant } from "@alfianrafli/growtopia.wasm";
 
 // Text Packet (Action / Login)
 const textPacket = TextPacket.from(3, "action|refresh_item_data", "");
