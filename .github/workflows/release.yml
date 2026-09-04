@@ -102,11 +102,17 @@ jobs:
           echo "Tarball: $TARBALL"
           tar -tzf "$TARBALL" | head -20
 
-      - name: Publish to npm
+      - name: Configure npm auth
         run: |
-          npm publish --access public --provenance
+          npm config set registry https://registry.npmjs.org/
+          if [ -n "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --access public --provenance
 
   github-release:
     needs: publish-npm
