@@ -1,5 +1,5 @@
 {
-  "name": "growtopia.wasm",
+  "name": "@alfianrafli/growtopia.wasm",
   "version": "0.2.0",
   "description": "A Universal Growtopia ENet WASM for Node.js, Bun.js (replacement for growtopia.js)",
   "main": "./dist/index.js",
@@ -12,17 +12,16 @@
       "import": "./dist/index.mjs"
     },
     "./node": {
-      "types": "./dist/src/node-transport.d.ts",
+      "types": "./dist/node-transport.d.ts",
       "import": "./dist/node-transport.mjs",
       "require": "./dist/node-transport.js"
     },
     "./browser": {
-      "types": "./dist/src/browser-transport.d.ts",
+      "types": "./dist/browser-transport.d.ts",
       "import": "./dist/browser-transport.mjs",
       "require": "./dist/browser-transport.js"
     },
-    "./package.json": "./package.json",
-    "./lib/pkg/*": "./lib/pkg/*"
+    "./package.json": "./package.json"
   },
   "license": "MIT",
   "ava": {
@@ -39,11 +38,11 @@
   "engines": {
     "node": ">= 10"
   },
-  "homepage": "https://github.com/StileDevs/growtopia.wasm#readme",
+  "homepage": "https://github.com/AlfianRafli/growtopia.wasm-ng#readme",
   "bugs": {
-    "url": "https://github.com/StileDevs/growtopia.wasm/issues"
+    "url": "https://github.com/AlfianRafli/growtopia.wasm-ng/issues"
   },
-  "repository": "https://github.com/StileDevs/growtopia.wasm",
+  "repository": "https://github.com/AlfianRafli/growtopia.wasm-ng",
   "keywords": [
     "growtopia",
     "rust",
