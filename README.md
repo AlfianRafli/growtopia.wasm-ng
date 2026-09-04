@@ -134,5 +134,5 @@ const variantTankPacket = variant.parse();
 
 This project is open-source software licensed under the [MIT License](LICENSE).
 
-It is a fork of the original work by [Original Author](https://github.com/StileDevs/growtopia.wasm). Massive thanks to them for laying the foundation. All modifications and current maintenance by Rafli(https://github.com/AlfianRafli).
+It is a fork of the original work by [Original Author](https://github.com/StileDevs/growtopia.wasm). Massive thanks to them for laying the foundation. All modifications and current maintenance by [Rafli](https://github.com/AlfianRafli).
 
