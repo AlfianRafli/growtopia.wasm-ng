@@ -33,6 +33,12 @@ export class BrowserENetHost {
     peers: new Collection<number, Peer>()
   };
 
+  // Stored event listeners for cleanup
+  private messageHandler: (event: MessageEvent) => void;
+  private errorHandler: (event: Event) => void;
+  private closeHandler: (event: Event) => void;
+  private openHandler: (event: Event) => void;
+
   protected constructor(settings: JsHostSettings) {
     this.emitter = createNanoEvents<ENetEvents>();
 
@@ -44,6 +50,20 @@ export class BrowserENetHost {
     };
 
     this.host = new Host("0.0.0.0", 0, settings, sendCallback);
+
+    // Initialize handlers as bound methods for later removal
+    this.messageHandler = (event: MessageEvent) => {
+      push_incoming_packet(this.host.id, "192.168.1.1", 1234, new Uint8Array(event.data));
+    };
+    this.errorHandler = (event: Event) => {
+      throw event;
+    };
+    this.closeHandler = (event: Event) => {
+      this.stopPolling();
+    };
+    this.openHandler = (event: Event) => {
+      // Optional: handle data channel open
+    };
   }
 
   private getPeer(id: number): Peer {
@@ -62,13 +82,11 @@ export class BrowserENetHost {
     this.dataChannel = channel;
     this.dataChannel.binaryType = "arraybuffer";
 
-    this.dataChannel.addEventListener("message", event => {
-      push_incoming_packet(this.host.id, "192.168.1.1", 1234, new Uint8Array(event.data));
-    });
-
-    this.dataChannel.addEventListener("error", event => {
-      throw event;
-    });
+    // Add listeners with stored handlers for later cleanup
+    channel.addEventListener("message", this.messageHandler);
+    channel.addEventListener("error", this.errorHandler);
+    channel.addEventListener("close", this.closeHandler);
+    channel.addEventListener("open", this.openHandler);
   }
 
   /**
@@ -147,6 +165,50 @@ export class BrowserENetHost {
       clearInterval(this.timer);
       this.timer = undefined;
     }
+  }
+
+  /**
+   * Releases all resources held by this host:
+   * - Stops polling
+   * - Removes all event listeners from dataChannel
+   * - Frees WASM Host
+   * - Clears peer cache
+   * - Closes dataChannel if open
+   *
+   * Safe to call multiple times (idempotent).
+   */
+  public destroy() {
+    // Stop polling first (idempotent)
+    this.stopPolling();
+
+    // Remove all event listeners from dataChannel
+    if (this.dataChannel) {
+      this.dataChannel.removeEventListener("message", this.messageHandler);
+      this.dataChannel.removeEventListener("error", this.errorHandler);
+      this.dataChannel.removeEventListener("close", this.closeHandler);
+      this.dataChannel.removeEventListener("open", this.openHandler);
+
+      // Close data channel if open
+      if (this.dataChannel.readyState === "open") {
+        try {
+          this.dataChannel.close();
+        } catch {
+          // Ignore errors during close
+        }
+      }
+
+      this.dataChannel = undefined;
+    }
+
+    // Free WASM Host (idempotent - wasm-bindgen handles double-free)
+    try {
+      this.host.free();
+    } catch {
+      // WASM host may already be freed; ignore
+    }
+
+    // Clear peer cache
+    this.cache.peers.clear();
   }
 }
 

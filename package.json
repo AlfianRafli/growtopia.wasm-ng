@@ -1,6 +1,6 @@
 {
   "name": "@alfianrafli/growtopia.wasm",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Universal Growtopia ENet WASM for Node.js, Bun.js (replacement for growtopia.js)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -24,6 +24,11 @@
     "./package.json": "./package.json"
   },
   "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "ava": {
     "files": [
       "__test__/**/*"

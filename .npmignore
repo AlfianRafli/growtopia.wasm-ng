@@ -1,34 +1,45 @@
-/target
-Cargo.lock
-.cargo
-.zed
-.github
-npm
-types
-.eslintrc
-.prettierignore
-rustfmt.toml
-yarn.lock
-*.node
-.yarn
-__test__
-/docs
-/assets
-/scratch
-/pkg
-/tls
-/test
-typedoc.json
-tsconfig.json
-/src
-/lib
-renovate.json
-build.rs
+# Internal docs (should not be published to npm)
+AGENTS.md
+API_MISMATCH_AUDIT.md
+COMPATIBILITY.md
+FINAL_VERIFICATION_REPORT.md
+PHASE_2-9_REPORT.md
+PRD.md
+TASKS.md
+TEST.md
+
+# Config files (dev-only)
+.eslintignore
+.oxlintignore
+
+# Source files (already compiled in dist/)
+src/
+lib/src/
 Cargo.toml
-.vscode
-.oxfmtrc.json
-.oxlintrc.json
-pnpm-lock.yaml
-bun.lock
-tsup.config.ts
-/examples
+rust-toolchain.toml
+
+# Test files
+__test__/
+*.test.mjs
+*.test.cjs
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts (re-generate from source)
+lib/pkg/
+
+# Documentation (use README.md only)
+docs/
+*.md
+
+# Git files
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db

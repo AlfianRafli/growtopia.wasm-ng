@@ -1,0 +1,166 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 24
+  BUN_VERSION: 1.3.14
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Project (WASM & JS/DTS)
+        run: bun run build
+
+      - name: Run Tests
+        run: bun run test
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  publish-npm:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Extract Version from Tag
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            VERSION=$(node -p "require('./package.json').version")
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check Version Not Already Published
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if npm view @alfianrafli/growtopia.wasm@$VERSION --json 2>/dev/null | grep -q '"version"'; then
+            echo "::error::Version $VERSION already exists on npm. Bump the version before releasing."
+            exit 1
+          fi
+          echo "Version $VERSION is new, proceeding with publish."
+
+      - name: Pack and Verify Tarball
+        run: |
+          npm pack
+          TARBALL=$(ls alfianrafli-growtopia.wasm-*.tgz | head -1)
+          echo "Tarball: $TARBALL"
+          tar -tzf "$TARBALL" | head -20
+
+      - name: Publish to npm (Trusted Publishing / OIDC)
+        run: |
+          npm config set provenance true
+          npm publish --access public --provenance
+
+  github-release:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Extract Version from Tag
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION=$(node -p "require('./package.json').version")
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Release Archive
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          zip -r "growtopia-wasm-v${VERSION}.zip" dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body: |
+            ## @alfianrafli/growtopia.wasm@${{ steps.version.outputs.version }}
+            
+            ### Installation
+            ```bash
+            npm install @alfianrafli/growtopia.wasm
+            # or
+            bun add @alfianrafli/growtopia.wasm
+            ```
+            
+            ### Changes
+            See [commit history](https://github.com/${{ github.repository }}/commits/v${{ steps.version.outputs.version }}) for details.
+            
+            ### Verification
+            - All tests passed
+            - Package published with provenance
+          files: |
+            growtopia-wasm-v${{ steps.version.outputs.version }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
