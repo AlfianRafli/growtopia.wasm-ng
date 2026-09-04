@@ -68,6 +68,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
+          scope: '@alfianrafli'
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -102,17 +103,10 @@ jobs:
           echo "Tarball: $TARBALL"
           tar -tzf "$TARBALL" | head -20
 
-      - name: Configure npm auth
-        run: |
-          npm config set registry https://registry.npmjs.org/
-          if [ -n "${{ secrets.NPM_TOKEN }}" ]; then
-            echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-          fi
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish to npm
         run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   github-release:
     needs: publish-npm
