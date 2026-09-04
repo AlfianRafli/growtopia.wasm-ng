@@ -102,10 +102,11 @@ jobs:
           echo "Tarball: $TARBALL"
           tar -tzf "$TARBALL" | head -20
 
-      - name: Publish to npm (Trusted Publishing / OIDC)
+      - name: Publish to npm
         run: |
-          npm config set provenance true
           npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   github-release:
     needs: publish-npm
